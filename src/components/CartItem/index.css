@@ -1,0 +1,17 @@
+.cart-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-food-image {
+  width: 136px;
+  height: 100px;
+  border-radius: 8px;
+  margin-right: 16px;
+}
+
+.image-name-container {
+  display: flex;
+  align-items: center;
+}

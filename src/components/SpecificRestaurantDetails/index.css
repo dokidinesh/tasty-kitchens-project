@@ -1,0 +1,68 @@
+.restaurant-details-top-section {
+  background-image: url('https://res.cloudinary.com/dl6nparcj/image/upload/v1635657042/Frame_279restaurant_background_k5umud.png');
+  display: flex;
+  padding-left: 165px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  margin-top: 48px;
+}
+
+.food-image {
+  width: 445px;
+  height: 280px;
+  margin-right: 30px;
+  border-radius: 8px;
+}
+
+.restaurant-top-section-heading {
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 48px;
+  color: #ffffff;
+}
+
+.location-cuisine {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  font-family: Roboto;
+  color: #ffffff;
+}
+
+.cost-rating {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  font-family: DM Sans;
+  color: #ffffff;
+}
+
+.cost-rating-container {
+  display: flex;
+}
+
+.restaurant-top-section-reviews {
+  font-family: DM Sans;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #e2e8f0;
+}
+
+.cost-for-two-heading {
+  font-family: DM Sans;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #e2e8f0;
+}
+
+.food-items-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 100px;
+  padding-right: 120px;
+  margin-bottom: 64px;
+}

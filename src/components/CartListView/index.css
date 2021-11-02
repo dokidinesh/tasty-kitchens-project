@@ -1,0 +1,20 @@
+.cart-list-container {
+  padding-left: 0;
+  margin-right: 100px;
+  margin-left: 100px;
+}
+
+.order-price-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-total-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.place-order-button {
+  align-self: flex-end;
+}

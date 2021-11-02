@@ -1,0 +1,46 @@
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #0f172a;
+  padding-top: 94px;
+  padding-bottom: 94px;
+}
+
+.logo-title-container {
+  display: flex;
+  align-items: center;
+}
+
+.footer-heading {
+  font-family: DM Sans;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 48px;
+  color: #ffffff;
+}
+
+.footer-description {
+  color: #ffffff;
+  font-family: DM Sans;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  width: 35%;
+  text-align: center;
+}
+
+.icons-list {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  width: 20%;
+}
+
+.icon-image {
+  color: #ffffff;
+  width: 39px;
+  height: 50px;
+}
