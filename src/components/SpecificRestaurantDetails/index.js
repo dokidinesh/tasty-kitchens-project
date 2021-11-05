@@ -1,10 +1,10 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import './index.css'
 import Loader from 'react-loader-spinner'
 import Navbar from '../Navbar'
 import FoodItem from '../FoodItem'
 import Footer from '../Footer'
+import './index.css'
 
 class SpecificRestaurantDetails extends Component {
   state = {

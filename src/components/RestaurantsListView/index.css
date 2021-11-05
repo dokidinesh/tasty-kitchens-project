@@ -12,6 +12,13 @@
   color: #183b56;
 }
 
+@media screen and (max-width: 767px) {
+  .popular-restaurants-heading {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
 .restaurant-details-loader-container {
   display: flex;
   justify-content: center;

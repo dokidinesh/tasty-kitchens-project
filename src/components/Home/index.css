@@ -1,6 +1,7 @@
 .restaurants-display {
-  margin-left: 120px;
-  margin-right: 120px;
+  width: 90%;
+  align-self: center;
+  margin: auto;
 }
 
 .separator {

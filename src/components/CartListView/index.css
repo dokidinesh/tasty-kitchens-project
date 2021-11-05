@@ -1,7 +1,11 @@
+.cart-place-order-container {
+  display: flex;
+  justify-content: center;
+}
+
 .cart-list-container {
   padding-left: 0;
-  margin-right: 100px;
-  margin-left: 100px;
+  width: 80%;
 }
 
 .order-price-container {
@@ -17,4 +21,11 @@
 
 .place-order-button {
   align-self: flex-end;
+}
+
+.payment-successfulView {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

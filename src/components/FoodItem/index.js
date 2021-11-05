@@ -4,34 +4,84 @@ import {Component} from 'react'
 class FoodItem extends Component {
   state = {
     isClickedAdd: false,
-    activeCount: 0,
+    quantity: 1,
   }
 
   onIncrement = () => {
-    this.setState(prevState => ({activeCount: prevState.activeCount + 1}))
+    const {foodDetails} = this.props
+    const {id} = foodDetails
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+
+    const updatedCartList = cartList.map(eachCartItem => {
+      if (id === eachCartItem.id) {
+        const updateQuantity = eachCartItem.quantity + 1
+        return {...eachCartItem, quantity: updateQuantity}
+      }
+      return eachCartItem
+    })
+
+    localStorage.setItem('cartData', updatedCartList)
   }
 
   onDecrement = () => {
-    const {activeCount} = this.state
-    if (activeCount > 0) {
-      this.setState(prevState => ({activeCount: prevState.activeCount - 1}))
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+    const {foodDetails} = this.props
+    const {id} = foodDetails
+
+    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+
+    if (foodObject.quantity > 1) {
+      const updatedCartList = cartList.map(eachCartItem => {
+        if (id === eachCartItem.id) {
+          const updateQuantity = eachCartItem.quantity - 1
+          return {...eachCartItem, quantity: updateQuantity}
+        }
+        return eachCartItem
+      })
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    } else {
+      const updatedCartList = cartList.filter(
+        eachCartItem => eachCartItem.id !== id,
+      )
+
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
     }
   }
 
   onClickAdd = () => {
     const {foodDetails} = this.props
-    const updatedFoodDetails = JSON.stringify(foodDetails)
-    localStorage.setItem('cartData', updatedFoodDetails)
+    const {id} = foodDetails
+    const {quantity} = this.state
+    const newFoodDetails = {...foodDetails, quantity}
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+
+    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+
+    if (foodObject) {
+      const updatedCartList = cartList.map(eachCartItem => {
+        if (foodObject.id === eachCartItem.id) {
+          const updateQuantity = eachCartItem.quantity + newFoodDetails.quantity
+
+          return {...eachCartItem, quantity: updateQuantity}
+        }
+        return eachCartItem
+      })
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    } else {
+      const updatedCartList = [...cartList, newFoodDetails]
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    }
+
     this.setState(prevState => ({
-      activeCount: 1,
+      quantity: 1,
       isClickedAdd: !prevState.isClickedAdd,
     }))
   }
 
   render() {
     const {foodDetails} = this.props
-    const {isClickedAdd, activeCount} = this.state
-    const isShowAddButton = activeCount === 0 || isClickedAdd === false
+    const {isClickedAdd, quantity} = this.state
+    const isShowAddButton = quantity === 0 || isClickedAdd === false
     const {imageUrl, name, cost, rating} = foodDetails
     return (
       <li className="food-item" testid="foodItem">
@@ -60,7 +110,7 @@ class FoodItem extends Component {
               >
                 -
               </button>
-              <p testid="active-count">{activeCount}</p>
+              <p testid="active-count">{quantity}</p>
               <button
                 type="button"
                 onClick={this.onIncrement}

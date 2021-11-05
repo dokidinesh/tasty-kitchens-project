@@ -15,6 +15,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+
       <OffersList />
       <div className="restaurants-display">
         <RestaurantsListView />
