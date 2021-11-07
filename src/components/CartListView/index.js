@@ -17,7 +17,6 @@ class CartListView extends Component {
 
   render() {
     const stringifiedCartList = localStorage.getItem('cartData')
-    console.log(stringifiedCartList)
     const cartList = JSON.parse(stringifiedCartList)
     const {isPlaceOrderClicked} = this.state
 

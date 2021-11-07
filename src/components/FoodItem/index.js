@@ -8,74 +8,24 @@ class FoodItem extends Component {
   }
 
   onIncrement = () => {
-    const {foodDetails} = this.props
-    const {id} = foodDetails
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
-
-    const updatedCartList = cartList.map(eachCartItem => {
-      if (id === eachCartItem.id) {
-        const updateQuantity = eachCartItem.quantity + 1
-        return {...eachCartItem, quantity: updateQuantity}
-      }
-      return eachCartItem
-    })
-
-    localStorage.setItem('cartData', updatedCartList)
+    this.setState(prevState => ({quantity: prevState.quantity + 1}))
   }
 
   onDecrement = () => {
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
-    const {foodDetails} = this.props
-    const {id} = foodDetails
+    const {quantity} = this.state
 
-    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
-
-    if (foodObject.quantity > 1) {
-      const updatedCartList = cartList.map(eachCartItem => {
-        if (id === eachCartItem.id) {
-          const updateQuantity = eachCartItem.quantity - 1
-          return {...eachCartItem, quantity: updateQuantity}
-        }
-        return eachCartItem
-      })
-      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-    } else {
-      const updatedCartList = cartList.filter(
-        eachCartItem => eachCartItem.id !== id,
-      )
-
-      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    if (quantity > 1) {
+      this.setState(prevState => ({quantity: prevState.quantity - 1}))
     }
   }
 
   onClickAdd = () => {
     const {foodDetails} = this.props
-    const {id} = foodDetails
     const {quantity} = this.state
-    const newFoodDetails = {...foodDetails, quantity}
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
-
-    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
-
-    if (foodObject) {
-      const updatedCartList = cartList.map(eachCartItem => {
-        if (foodObject.id === eachCartItem.id) {
-          const updateQuantity = eachCartItem.quantity + newFoodDetails.quantity
-
-          return {...eachCartItem, quantity: updateQuantity}
-        }
-        return eachCartItem
-      })
-      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-    } else {
-      const updatedCartList = [...cartList, newFoodDetails]
-      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-    }
-
-    this.setState(prevState => ({
-      quantity: 1,
-      isClickedAdd: !prevState.isClickedAdd,
-    }))
+    const updatedFoodDetails = {...foodDetails, quantity}
+    const cartList = [updatedFoodDetails]
+    localStorage.setItem('cartData', JSON.stringify(cartList))
+    this.setState(prevState => ({isClickedAdd: !prevState.isClickAdd}))
   }
 
   render() {
