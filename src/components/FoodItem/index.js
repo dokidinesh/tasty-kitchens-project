@@ -1,6 +1,8 @@
 import './index.css'
 import {Component} from 'react'
 
+let updatedCartList
+
 class FoodItem extends Component {
   state = {
     isClickedAdd: false,
@@ -20,11 +22,29 @@ class FoodItem extends Component {
   }
 
   onClickAdd = () => {
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {foodDetails} = this.props
+
     const {quantity} = this.state
     const updatedFoodDetails = {...foodDetails, quantity}
-    const cartList = [updatedFoodDetails]
-    localStorage.setItem('cartData', JSON.stringify(cartList))
+    const foodObject = cartList.find(
+      eachCartItem => eachCartItem.id === foodDetails.id,
+    )
+
+    if (foodObject) {
+      updatedCartList = cartList.map(eachCartItem => {
+        if (foodObject.id === eachCartItem.id) {
+          const updatedQuantity =
+            eachCartItem.quantity + updatedFoodDetails.quantity
+
+          return {...eachCartItem, quantity: updatedQuantity}
+        }
+        return eachCartItem
+      })
+    } else {
+      updatedCartList = [...cartList, updatedFoodDetails]
+    }
+    localStorage.setItem('cartData', JSON.stringify(updatedCartList))
     this.setState(prevState => ({isClickedAdd: !prevState.isClickAdd}))
   }
 
