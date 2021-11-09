@@ -4,25 +4,43 @@ import './index.css'
 
 class CartItem extends Component {
   state = {
-    quantityCount: 1,
+    itemQuantity: 0,
   }
 
   onIncrement = () => {
-    this.setState(prevState => ({quantityCount: prevState.quantityCount + 1}))
+    const {cartItemDetails} = this.props
+    const {id} = cartItemDetails
+    this.setState(prevState => ({itemQuantity: prevState.itemQuantity + 1}))
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+
+    if (foodObject) {
+      const updatedCartList = cartList.map(eachCartItem => {
+        if (eachCartItem.id === foodObject.id) {
+          const updateQuantity = eachCartItem.itemQuantity + 1
+          return {...eachCartItem, itemQuantity: updateQuantity}
+        }
+        return eachCartItem
+      })
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    }
   }
 
   onDecrement = () => {
-    const {quantityCount} = this.state
+    const {itemQuantity} = this.state
 
-    if (quantityCount > 1) {
-      this.setState({quantityCount: quantityCount - 1})
+    if (itemQuantity > 1) {
+      this.setState({
+        itemQuantity: itemQuantity - 1,
+      })
     }
   }
 
   render() {
     const {cartItemDetails} = this.props
-    const {quantityCount} = this.state
-    const {imageUrl, name, cost} = cartItemDetails
+
+    const {imageUrl, name, cost, quantity} = cartItemDetails
+    const itemQuantity = quantity
     return (
       <div className="desktop-cart-item-container" testid="cartItem">
         <div className="image-name-container">
@@ -38,7 +56,7 @@ class CartItem extends Component {
             -
           </button>
           <p className="item-quantity" testid="item-quantity">
-            {quantityCount}
+            {itemQuantity}
           </p>
           <button
             type="button"
@@ -50,7 +68,7 @@ class CartItem extends Component {
         </div>
         <div className="food-cost">
           <BiRupee />
-          <p>{cost}.00</p>
+          <p>{cost * quantity}.00</p>
         </div>
       </div>
     )

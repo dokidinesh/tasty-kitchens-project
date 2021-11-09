@@ -21,7 +21,6 @@ class SpecificRestaurantDetails extends Component {
     const {match} = this.props
     const {params} = match
     const {id} = params
-    console.log(id)
 
     const accessToken = Cookies.get('jwt_token')
     const apiUrl = `https://apis.ccbp.in/restaurants-list/${id}`

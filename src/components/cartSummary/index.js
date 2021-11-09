@@ -4,6 +4,7 @@ import {BiRupee} from 'react-icons/bi'
 const CartSummary = props => {
   const cartList = JSON.parse(localStorage.getItem('cartData'))
   const {onClickPlaceOrder} = props
+  console.log(cartList)
 
   const onClickPlaceOrderButton = () => {
     onClickPlaceOrder()

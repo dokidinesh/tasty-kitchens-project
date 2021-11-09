@@ -6,7 +6,7 @@ let updatedCartList
 class FoodItem extends Component {
   state = {
     isClickedAdd: false,
-    quantity: 1,
+    quantity: 0,
   }
 
   onIncrement = () => {
@@ -19,7 +19,7 @@ class FoodItem extends Component {
       updatedCartList = cartList.map(eachCartItem => {
         if (eachCartItem.id === foodObject.id) {
           const updatedQuantity = eachCartItem.quantity + 1
-          return {...eachCartItem, updatedQuantity}
+          return {...eachCartItem, quantity: updatedQuantity}
         }
         return eachCartItem
       })
@@ -29,42 +29,63 @@ class FoodItem extends Component {
 
   onDecrement = () => {
     const {quantity} = this.state
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+    const {foodDetails} = this.props
+    const {id} = foodDetails
+    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
 
-    if (quantity > 1) {
+    if (foodObject.quantity > 1) {
       this.setState(prevState => ({quantity: prevState.quantity - 1}))
+
+      if (foodObject) {
+        updatedCartList = cartList.map(eachCartItem => {
+          if (eachCartItem.id === foodObject.id) {
+            const updatedQuantity = eachCartItem.quantity - 1
+            return {...eachCartItem, quantity: updatedQuantity}
+          }
+          return eachCartItem
+        })
+      } else if (foodObject.quantity === 1) {
+        updatedCartList = cartList.filter(
+          eachCartItem => eachCartItem.id !== id,
+        )
+        localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+      }
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    } else if (quantity === 1) {
+      this.setState(prevState => ({
+        isClickedAdd: !prevState.isClickedAdd,
+      }))
     }
   }
 
   onClickAdd = () => {
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {foodDetails} = this.props
+    const {id} = foodDetails
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
 
-    const {quantity} = this.state
-    const updatedFoodDetails = {...foodDetails, quantity}
-    const foodObject = cartList.find(
-      eachCartItem => eachCartItem.id === foodDetails.id,
-    )
-
-    if (foodObject) {
-      updatedCartList = cartList.map(eachCartItem => {
-        if (foodObject.id === eachCartItem.id) {
-          const updatedQuantity = eachCartItem.quantity + quantity
-
-          return {...eachCartItem, quantity: updatedQuantity}
-        }
-        return eachCartItem
-      })
+    if (cartList === null) {
+      const updatedFoodDetails = {...foodDetails, quantity: 1}
+      updatedCartList = [updatedFoodDetails]
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
     } else {
-      updatedCartList = [...cartList, updatedFoodDetails]
+      const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+
+      if (!foodObject) {
+        const updatedFoodDetails = {...foodDetails, quantity: 1}
+        updatedCartList = [...cartList, updatedFoodDetails]
+        localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+      }
     }
-    localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-    this.setState(prevState => ({isClickedAdd: !prevState.isClickAdd}))
+    this.setState(prevState => ({
+      isClickedAdd: !prevState.isClickAdd,
+      quantity: 1,
+    }))
   }
 
   render() {
     const {foodDetails} = this.props
-    const {isClickedAdd, quantity} = this.state
-    const isShowAddButton = quantity === 0 || isClickedAdd === false
+    const {quantity} = this.state
     const {imageUrl, name, cost, rating} = foodDetails
     return (
       <li className="food-item" testid="foodItem">
@@ -76,7 +97,7 @@ class FoodItem extends Component {
             <span>.00</span>
           </p>
           <p className="food-item-rating">{rating}</p>
-          {isShowAddButton ? (
+          {quantity < 1 ? (
             <button
               className="add-button"
               type="button"
