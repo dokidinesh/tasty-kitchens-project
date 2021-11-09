@@ -11,6 +11,20 @@ class FoodItem extends Component {
 
   onIncrement = () => {
     this.setState(prevState => ({quantity: prevState.quantity + 1}))
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
+    const {foodDetails} = this.props
+    const {id} = foodDetails
+    const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+    if (foodObject) {
+      updatedCartList = cartList.map(eachCartItem => {
+        if (eachCartItem.id === foodObject.id) {
+          const updatedQuantity = eachCartItem.quantity + 1
+          return {...eachCartItem, updatedQuantity}
+        }
+        return eachCartItem
+      })
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+    }
   }
 
   onDecrement = () => {
@@ -34,8 +48,7 @@ class FoodItem extends Component {
     if (foodObject) {
       updatedCartList = cartList.map(eachCartItem => {
         if (foodObject.id === eachCartItem.id) {
-          const updatedQuantity =
-            eachCartItem.quantity + updatedFoodDetails.quantity
+          const updatedQuantity = eachCartItem.quantity + quantity
 
           return {...eachCartItem, quantity: updatedQuantity}
         }

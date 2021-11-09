@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import {Link} from 'react-router-dom'
+import CartSummary from '../cartSummary'
 import CartItem from '../CartItem'
 
 import './index.css'
@@ -38,7 +39,12 @@ class CartListView extends Component {
           </div>
         ) : (
           <div className="cart-list-container">
-            <ul>
+            <ul className="cart-list">
+              <li className="cart-item-header">
+                <p className="table-header-cell">Item</p>
+                <p className="table-header-cell">Quantity</p>
+                <p className="table-header-cell">Price</p>
+              </li>
               {cartList.map(eachCartItem => (
                 <CartItem
                   cartItemDetails={eachCartItem}
@@ -46,20 +52,7 @@ class CartListView extends Component {
                 />
               ))}
             </ul>
-            <div className="order-total-container">
-              <div className="order-price-container">
-                <h1>Order Total:</h1>
-                <p testid="total-price">total price</p>
-              </div>
-
-              <button
-                className="place-order-button"
-                type="button"
-                onClick={this.onClickPlaceOrder}
-              >
-                Place Order
-              </button>
-            </div>
+            <CartSummary onClickPlaceOrder={this.onClickPlaceOrder} />
           </div>
         )}
       </div>

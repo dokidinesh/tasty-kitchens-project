@@ -1,7 +1,8 @@
-.cart-item-container {
+.desktop-cart-item-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .cart-food-image {
@@ -14,11 +15,40 @@
 .image-name-container {
   display: flex;
   align-items: center;
+  margin-left: 48px;
+  margin-left: 0;
+  width: 33%;
 }
 
 .counter-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100px;
+  justify-content: center;
+  width: 33%;
+}
+
+.item-quantity {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.food-cost {
+  width: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: DM Sans;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #ffa412;
+}
+
+.food-name {
+  font-family: DM Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #183b56;
 }

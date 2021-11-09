@@ -6,21 +6,21 @@
 .cart-list-container {
   padding-left: 0;
   width: 80%;
+  background-color: #f9fbfe;
+  margin-top: 48px;
+
+  padding-left: 0;
 }
 
-.order-price-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.table-header-cell {
+  width: 33%;
+  text-align: center;
 
-.order-total-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.place-order-button {
-  align-self: flex-end;
+  font-family: DM Sans;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #475569;
 }
 
 .payment-successfulView {
@@ -28,4 +28,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.cart-item-header {
+  display: flex;
+  justify-content: space-between;
 }
