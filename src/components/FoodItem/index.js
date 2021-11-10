@@ -1,24 +1,26 @@
 import './index.css'
 import {Component} from 'react'
 
-let updatedCartList
-
 class FoodItem extends Component {
   state = {
     isClickedAdd: false,
-    quantity: 0,
+    activeCount: 1,
   }
 
   onIncrement = () => {
-    this.setState(prevState => ({quantity: prevState.quantity + 1}))
+    this.setState(prevState => ({
+      activeCount: prevState.activeCount + 1,
+    }))
     const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {foodDetails} = this.props
     const {id} = foodDetails
     const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
     if (foodObject) {
-      updatedCartList = cartList.map(eachCartItem => {
-        if (eachCartItem.id === foodObject.id) {
-          const updatedQuantity = eachCartItem.quantity + 1
+      const quantity = JSON.parse(localStorage.getItem(`quantity${id}`))
+      const updatedQuantity = quantity + 1
+      localStorage.setItem(`quantity${id}`, JSON.stringify(updatedQuantity))
+      const updatedCartList = cartList.map(eachCartItem => {
+        if (foodObject.id === eachCartItem.id) {
           return {...eachCartItem, quantity: updatedQuantity}
         }
         return eachCartItem
@@ -28,76 +30,82 @@ class FoodItem extends Component {
   }
 
   onDecrement = () => {
-    const {quantity} = this.state
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {foodDetails} = this.props
     const {id} = foodDetails
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
+    const quantity = JSON.parse(localStorage.getItem(`quantity${id}`))
 
-    if (foodObject.quantity > 1) {
-      this.setState(prevState => ({quantity: prevState.quantity - 1}))
-
+    if (quantity > 1) {
+      this.setState(prevState => ({activeCount: prevState.activeCount - 1}))
       if (foodObject) {
-        updatedCartList = cartList.map(eachCartItem => {
-          if (eachCartItem.id === foodObject.id) {
-            const updatedQuantity = eachCartItem.quantity - 1
+        const updatedQuantity = quantity - 1
+        localStorage.setItem(`quantity${id}`, JSON.stringify(updatedQuantity))
+        const updatedCartList = cartList.map(eachCartItem => {
+          if (foodObject.id === eachCartItem.id) {
             return {...eachCartItem, quantity: updatedQuantity}
           }
           return eachCartItem
         })
-      } else if (foodObject.quantity === 1) {
-        updatedCartList = cartList.filter(
-          eachCartItem => eachCartItem.id !== id,
-        )
         localStorage.setItem('cartData', JSON.stringify(updatedCartList))
       }
+    } else {
+      this.setState(prevState => ({isClickedAdd: !prevState.isClickedAdd}))
+      localStorage.setItem(`isClickedAdd ${id}`, 'false')
+      const updatedCartList = cartList.filter(
+        eachCartItem => eachCartItem.id !== id,
+      )
       localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-    } else if (quantity === 1) {
-      this.setState(prevState => ({
-        isClickedAdd: !prevState.isClickedAdd,
-      }))
     }
   }
 
   onClickAdd = () => {
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {foodDetails} = this.props
     const {id} = foodDetails
-    const cartList = JSON.parse(localStorage.getItem('cartData'))
+    this.setState(prevState => ({
+      isClickedAdd: !prevState.isClickedAdd,
+      quantity: prevState.quantity + 1,
+    }))
+    const updatedFoodDetails = {...foodDetails, quantity: 1}
 
     if (cartList === null) {
-      const updatedFoodDetails = {...foodDetails, quantity: 1}
-      updatedCartList = [updatedFoodDetails]
+      const updatedCartList = [updatedFoodDetails]
       localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+      localStorage.setItem(`isClickAdd ${id}`, 'true')
+      localStorage.setItem(`quantity${id}`, '1')
     } else {
-      const foodObject = cartList.find(eachCartItem => eachCartItem.id === id)
-
-      if (!foodObject) {
-        const updatedFoodDetails = {...foodDetails, quantity: 1}
-        updatedCartList = [...cartList, updatedFoodDetails]
-        localStorage.setItem('cartData', JSON.stringify(updatedCartList))
-      }
+      const updatedCartList = [...cartList, updatedFoodDetails]
+      localStorage.setItem('cartData', JSON.stringify(updatedCartList))
+      localStorage.setItem(`isClickAdd ${id}`, 'true')
+      localStorage.setItem(`quantity${id}`, '1')
     }
-    this.setState(prevState => ({
-      isClickedAdd: !prevState.isClickAdd,
-      quantity: 1,
-    }))
   }
 
   render() {
     const {foodDetails} = this.props
-    const {quantity} = this.state
-    const {imageUrl, name, cost, rating} = foodDetails
+    const {imageUrl, name, cost, rating, id} = foodDetails
+    const {activeCount} = this.state
+    const quantity = JSON.parse(localStorage.getItem(`quantity${id}`))
+    const isClickedAdd = localStorage.getItem(`isClickAdd ${id}`)
     return (
       <li className="food-item" testid="foodItem">
         <img className="food-item-image" src={imageUrl} alt="food item" />
         <div className="food-item-details">
           <h1 className="food-item-name">{name}</h1>
-          <p className="food-item-cost">
-            {cost}
-            <span>.00</span>
-          </p>
+          <p className="food-item-cost">{cost}.00</p>
           <p className="food-item-rating">{rating}</p>
-          {quantity < 1 ? (
+          {isClickedAdd ? (
+            <div className="counter-container">
+              <button type="button" onClick={this.onDecrement}>
+                -
+              </button>
+              <p>{quantity}</p>
+              <button type="button" onClick={this.onIncrement}>
+                +
+              </button>
+            </div>
+          ) : (
             <button
               className="add-button"
               type="button"
@@ -105,24 +113,6 @@ class FoodItem extends Component {
             >
               Add
             </button>
-          ) : (
-            <div className="counter-container">
-              <button
-                type="button"
-                onClick={this.onDecrement}
-                testid="decrement-count"
-              >
-                -
-              </button>
-              <p testid="active-count">{quantity}</p>
-              <button
-                type="button"
-                onClick={this.onIncrement}
-                testid="increment-count"
-              >
-                +
-              </button>
-            </div>
           )}
         </div>
       </li>

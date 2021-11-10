@@ -14,11 +14,12 @@ class CartListView extends Component {
     this.setState(prevState => ({
       isPlaceOrderClicked: !prevState.isPlaceOrderClicked,
     }))
+    localStorage.clear()
+    localStorage.setItem('cartData', JSON.stringify([]))
   }
 
   render() {
-    const stringifiedCartList = localStorage.getItem('cartData')
-    const cartList = JSON.parse(stringifiedCartList)
+    const cartList = JSON.parse(localStorage.getItem('cartData'))
     const {isPlaceOrderClicked} = this.state
 
     return (

@@ -5,8 +5,7 @@ import CartListView from '../CartListView'
 import './index.css'
 
 const Cart = () => {
-  const stringifiedCartList = localStorage.getItem('cartData')
-  const cartList = JSON.parse(stringifiedCartList)
+  const cartList = JSON.parse(localStorage.getItem('cartData'))
   const showEmptyCartView = cartList.length === 0
 
   return (
